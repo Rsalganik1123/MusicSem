@@ -4,7 +4,7 @@ import os
 import re 
 import shutil
 import argparse  
-import ipdb 
+# import ipdb 
 from playntell.playntell.eval import run_eval 
 
 def parse_args(): 
@@ -40,7 +40,8 @@ def launch():
         id_key=id_key, 
         table_caption_key=args.table_caption_key, 
         gen_caption_key=args.gen_caption_key,
-        dataset=args.eval_data
+        dataset=args.eval_data, 
+        model=args.gen_model 
     )
 
 launch() 
