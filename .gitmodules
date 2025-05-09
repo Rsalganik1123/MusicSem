@@ -1,0 +1,3 @@
+[submodule "evaluation/m2t/playntell"]
+	path = evaluation/m2t/playntell
+	url = https://github.com/deezer/playntell.git
