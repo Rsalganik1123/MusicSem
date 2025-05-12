@@ -1,18 +1,18 @@
-[submodule "evaluation/m2t/playntell"]
-	path = evaluation/m2t/playntell
+[submodule "evaluations/m2t/playntell"]
+	path = evaluations/m2t/playntell
 	url = https://github.com/deezer/playntell.git
-[submodule "model/t2m/mustango/mustango"]
-	path = model/t2m/mustango/mustango
+[submodule "models/t2m/mustango/mustango"]
+	path = models/t2m/mustango/mustango
 	url = https://github.com/AMAAI-Lab/mustango.git
-[submodule "model/t2m/musiclm/open-musiclm"]
-	path = model/t2m/musiclm/open-musiclm
+[submodule "models/t2m/musiclm/open-musiclm"]
+	path = models/t2m/musiclm/open-musiclm
 	url = https://github.com/zhvng/open-musiclm.git
-[submodule "model/m2t/mullama/MU-LLaMA"]
-	path = model/m2t/mullama/MU-LLaMA
+[submodule "models/m2t/mullama/MU-LLaMA"]
+	path = models/m2t/mullama/MU-LLaMA
 	url = https://github.com/shansongliu/MU-LLaMA.git
-[submodule "model/m2t/mullama/lp-music-caps"]
-	path = model/m2t/mullama/lp-music-caps
+[submodule "models/m2t/mullama/lp-music-caps"]
+	path = models/m2t/mullama/lp-music-caps
 	url = https://github.com/seungheondoh/lp-music-caps.git
-[submodule "model/m2t/lpmusiccaps/lp-music-caps"]
-	path = model/m2t/lpmusiccaps/lp-music-caps
+[submodule "models/m2t/lpmusiccaps/lp-music-caps"]
+	path = models/m2t/lpmusiccaps/lp-music-caps
 	url = https://github.com/seungheondoh/lp-music-caps.git
