@@ -1,0 +1,195 @@
+a-unet==0.0.16
+accelerate==1.0.1
+aiohappyeyeballs==2.6.1
+aiohttp==3.11.14
+aiosignal==1.3.2
+annotated-types==0.7.0
+anthropic==0.49.0
+antlr4-python3-runtime==4.9.3
+anyio==3.7.1
+asttokens==2.4.1
+attrs==24.2.0
+audio-diffusion-pytorch==0.1.3
+audiolm-pytorch==2.4.0
+audioread==3.0.1
+beartype==0.20.2
+beautifulsoup4==4.13.3
+bitarray==3.2.0
+blobfile==3.0.0
+Brotli @ file:///croot/brotli-split_1714483155106/work
+certifi @ file:///croot/certifi_1738623731865/work/certifi
+cffi==1.17.1
+charset-normalizer @ file:///croot/charset-normalizer_1721748349566/work
+click==8.1.8
+colorama==0.4.6
+contourpy==1.3.2
+cycler==0.12.1
+Cython==3.0.12
+dacite==1.9.2
+data-science-types==0.2.23
+datasets==3.4.1
+decorator==5.1.1
+Deprecated==1.2.18
+dill==0.3.8
+distro==1.9.0
+docker-pycreds==0.4.0
+einops==0.8.1
+einx==0.3.0
+ema-pytorch==0.7.7
+encodec==0.1.1
+et-xmlfile @ file:///work/perseverance-python-buildout/croot/et_xmlfile_1698868193149/work
+executing==2.1.0
+fairseq @ git+https://github.com/Tps-F/fairseq.git@ff08af27e302625a27d3502b0791a9367c8af0c7
+fastapi==0.103.2
+filelock @ file:///work/perseverance-python-buildout/croot/filelock_1701733993137/work
+fire==0.7.0
+fonttools==4.57.0
+frozendict==2.4.6
+frozenlist==1.5.0
+fsspec==2024.10.0
+ftfy==6.3.1
+gateloop-transformer==0.2.5
+gitdb==4.0.12
+GitPython==3.1.44
+h11==0.14.0
+h5py==3.13.0
+httpcore==1.0.6
+httpx==0.27.2
+huggingface-hub==0.26.2
+hydra-core==1.3.2
+hyper-connections==0.1.15
+idna @ file:///croot/idna_1714398848350/work
+ipdb==0.13.13
+ipython==8.29.0
+jaconv==0.4.0
+jedi==0.19.1
+Jinja2 @ file:///croot/jinja2_1716993405101/work
+jiter==0.7.0
+joblib==1.4.2
+json5==0.12.0
+jsonlines==4.0.0
+kagglehub==0.3.10
+kiwisolver==1.4.8
+lazy_loader==0.4
+librosa==0.11.0
+lion-pytorch==0.2.3
+llama_models==0.0.47
+llama_stack==0.0.47
+llvmlite==0.44.0
+local-attention==1.11.1
+lxml==5.3.0
+markdown-it-py==3.0.0
+MarkupSafe @ file:///work/perseverance-python-buildout/croot/markupsafe_1707342994941/work
+matplotlib==3.10.3
+matplotlib-inline==0.1.7
+mdurl==0.1.2
+mkl-service==2.4.0
+mkl_fft @ file:///croot/mkl_fft_1725370245198/work
+mkl_random @ file:///croot/mkl_random_1725370241878/work
+mpmath @ file:///work/perseverance-python-buildout/croot/mpmath_1698864994882/work
+msgpack==1.1.0
+multidict==6.2.0
+multiprocess==0.70.16
+musiclm-pytorch==0.2.8
+mutagen==1.47.0
+networkx @ file:///croot/networkx_1717597493534/work
+numba==0.61.0
+numpy==1.26.4
+omegaconf==2.3.0
+openai==1.53.0
+openpyxl @ file:///croot/openpyxl_1736366913861/work
+packaging==24.1
+pandas==2.2.3
+parso==0.8.4
+pexpect==4.9.0
+pillow @ file:///croot/pillow_1721059439630/work
+platformdirs==4.3.7
+pooch==1.8.2
+portalocker==3.1.1
+prompt_toolkit==3.0.48
+propcache==0.3.0
+protobuf==5.28.3
+psutil==6.1.0
+ptyprocess==0.7.0
+pure_eval==0.2.3
+pyarrow==19.0.1
+pycparser==2.22
+pycryptodomex==3.21.0
+pydantic==2.9.2
+pydantic_core==2.23.4
+pydub==0.25.1
+Pygments==2.18.0
+pykakasi==2.3.0
+pyparsing==3.2.3
+PySocks @ file:///work/perseverance-python-buildout/croot/pysocks_1698845478203/work
+python-dateutil==2.9.0.post0
+python-dotenv==1.0.1
+python-slugify==8.0.4
+pytorch-warmup==0.2.0
+pytube==15.0.0
+pytz==2024.2
+PyYAML @ file:///croot/pyyaml_1728657952215/work
+RapidFuzz==3.12.2
+redis==5.2.1
+regex==2024.9.11
+requests @ file:///croot/requests_1721410876868/work
+rich==13.9.4
+rotary-embedding-torch==0.8.6
+sacrebleu==2.5.1
+safetensors==0.4.5
+scikit-learn==1.6.1
+scipy==1.15.2
+seaborn==0.13.2
+sentencepiece==0.2.0
+sentry-sdk==2.24.1
+setproctitle==1.3.5
+setuptools==78.1.0
+simplejson==3.19.3
+six==1.16.0
+smmap==5.0.2
+sniffio==1.3.1
+soundcloud-v2==1.6.0
+soundfile==0.13.1
+soupsieve==2.6
+soxr==0.5.0.post1
+spotdl==4.2.11
+spotipy==2.25.1
+stack-data==0.6.3
+starlette==0.27.0
+sympy==1.13.1
+syncedlyrics==1.0.1
+tabulate==0.9.0
+tensorboardX==2.6.2.2
+termcolor==2.5.0
+text-unidecode==1.3
+threadpoolctl==3.6.0
+tiktoken==0.8.0
+tokenizers==0.20.1
+torch==2.5.0
+torchaudio==2.5.0
+torchlibrosa==0.1.0
+torchvision==0.20.0
+tqdm==4.66.6
+traitlets==5.14.3
+transformers==4.46.0
+triton==3.1.0
+typing_extensions @ file:///croot/typing_extensions_1715268824938/work
+tzdata==2024.2
+ujson==5.10.0
+Unidecode==1.3.8
+urllib3 @ file:///croot/urllib3_1727769808118/work
+uvicorn==0.23.2
+vector-quantize-pytorch==1.22.3
+wandb==0.19.8
+wcwidth==0.2.13
+websockets==14.2
+wget==3.2
+wheel==0.45.1
+wordcloud==1.9.4
+wrapt==1.17.2
+x-clip==0.14.4
+xxhash==3.5.0
+yarl==1.18.3
+yt-dlp==2025.3.27
+ytmusicapi==1.10.2
+zstandard==0.23.0
