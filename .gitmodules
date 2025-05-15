@@ -16,3 +16,6 @@
 [submodule "models/m2t/lpmusiccaps/lp-music-caps"]
 	path = models/m2t/lpmusiccaps/lp-music-caps
 	url = https://github.com/seungheondoh/lp-music-caps.git
+[submodule "evaluations/t2m/t2m_toolkit/audioldm_eval"]
+	path = evaluations/t2m/t2m_toolkit/audioldm_eval
+	url = https://github.com/haoheliu/audioldm_eval.git
