@@ -1,0 +1,116 @@
+MODELS: #PLACE CHECKPOINT FOR HTSAT BELOW 
+  AUDIO_MODELS:
+    HTSAT: 
+      batch_size: 1 #50 
+      embed_dim: 768
+      target_length: 1407
+      freqm: 48
+      timem: 192
+      mixup: 0.5
+      mean: -4.2677393
+      std: 4.5689974
+      skip_norm: False
+      max_length_ms: 30_000
+      audio_length: 1407
+      clip_samples: 1323000
+      num_mel_bins: 64
+      sample_rate: 44100
+      window_size: 1024
+      hop_size: 940
+      fmin: 50
+      fmax: 14000
+      class_num: 527
+      model_type: "HTSAT"
+      model_name: "tiny"
+      checkpoint: '/model/tteng/MusicEnocdeFactory/models/LARP/models/HTSAT-fullset-tiny-map=0.467.ckpt'
+      
+  LANGUAGE_MODELS: 
+    BERT: #configuration parameters for BERT text backbone model 
+      architectures: ["BertModel"]
+      attention_probs_dropout_prob: 0.1
+      hidden_act: "gelu"
+      hidden_dropout_prob: 0.1
+      hidden_size: 768
+      initializer_range: 0.02
+      intermediate_size: 3072
+      layer_norm_eps: 1e-12
+      max_position_embeddings: 512
+      model_type: "bert"
+      num_attention_heads: 12
+      num_hidden_layers: 12
+      pad_token_id: 0
+      type_vocab_size: 2
+      vocab_size: 30522 #49408 (CLAP)
+      encoder_width: 768
+      add_cross_attention: True 
+      context_length: 77 #CLAP
+      heads: 8 #CLAP
+      layers: 12 #CLAP
+
+      PRETRAINED_FEATURES: 
+        MPD: 
+          CAPTION: '/mnt/ssd1/rebecca/spotify_clean/benchmark_feat/bert_feat/test/features.pt'
+          URIS: '/mnt/ssd1/rebecca/spotify_clean/benchmark_feat/bert_feat/test/uris.pkl'
+        LFM: 
+          CAPTION: '/mnt/ssd1/rebecca/lfm/benchmark_feat/bert_feat/features.pt'
+          URIS: '/mnt/ssd1/rebecca/lfm/benchmark_feat/bert_feat/uris.pkl'
+  
+  BASE_MODELS: 
+    LARP: #configuration parameters for BLIP architecture 
+      queue_size: 57600
+      alpha: 0.4
+      weight_decay: 0.05
+      init_lr: 3e-4
+      min_lr: 1e-6
+      warmup_lr: 1e-6
+      lr_decay_rate: 0.9
+      max_epoch: 20  
+      warmup_steps: 3000
+      batch_size: 20
+      n_worker:  4 #24
+      n_epochs: 45
+      embed_dim: 256 #512
+      fusion_method: average # average soft_weight, or self_attn
+    
+EVALUATION: 
+  topk: [10, 20, 40]
+  BUNDLE:
+    metrics: ['recall', 'ndcg']
+    decision_metric:  'recall'
+    decision_index: 10 
+    batch_size: 10
+    batch_size_train: 20
+    lr: 1e-3
+    l2_reg: 1e-4
+    test_interval: 1
+     
+DATASETS: #CHANGE FILE PATHS BELOW 
+  MPD: 
+    id_key: 'track_uri'
+    TOY_SET: 
+      org_filepath: '/spotify/caption_sets/train_captions.pkl' 
+      train: '/spotify/caption_sets/train_captions.pkl'
+      valid: '/spotify/caption_sets/valid_captions.pkl'
+      test: '/spotify/caption_sets/test_captions.pkl'
+      CIC:
+        pair_dataset_path: '/spotify/pair_sets/5_pairs.pkl'
+        pair_dataset_path_resnet: '/spotify/pair_sets/pt_pairs.pkl'
+      CIP: 
+        pair_dataset_path: '/spotify/pair_sets/5_pairs_cip.pkl'
+        sequences_dataset_path: '/spotify/pair_sets/MPD_p_seq.pt'
+  LFM: 
+    id_key: 'track_uri'
+    TOY_SET: 
+      org_filepath: '/lfm/caption_sets/train_captions_cleaned.pkl' 
+      train: '/lfm/caption_sets/train_captions_cleaned.pkl' 
+      valid: '/lfm/caption_sets/valid_captions_cleaned.pkl' 
+      test: '/lfm/caption_sets/test_captions_cleaned.pkl' 
+      session: '/lfm/caption_sets/test_captions_session.pkl' 
+      trunc: '/lfm/caption_sets/test_captions_trunc.pkl' 
+      CIC:
+        pair_dataset_path: '/lfm/pair_sets/5_pairs.pkl'
+      CIP:
+        pair_dataset_path: '/lfm/pair_sets/5_pairs.pkl'
+        sequences_dataset_path: '/lfm/pair_sets/LFM_p_seq.pt'
+
+
