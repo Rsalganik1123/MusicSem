@@ -26,10 +26,9 @@ audio_dict = {
 def parse_args(): 
     parser = argparse.ArgumentParser()
     parser.add_argument('--gen_model', choices=['musicgen', 'stable_audio', 'musiclm', 'mustango', 'audioldm2', 'mureka'])
-    parser.add_argument('--mc_path', default='/data2/rsalgani/music-caps/wav/')
     parser.add_argument('--gen_dir', default='/data2/rsalgani/saved_embeddings/')
+    parser.add_argument('--ref_dir' default='')
     parser.add_argument('--dataset', choices=['music_caps', 'song_describer', 'test_set_May6'])
-    parser.add_argument('--save_dir', default='/data2/rsalgani/eval_outputs/')
     parser.add_argument('--metric', choices=['CLAP', 'KLD', 'VS'])
     return parser.parse_args()
 
