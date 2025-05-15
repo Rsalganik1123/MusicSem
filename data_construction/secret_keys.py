@@ -1,5 +1,0 @@
-spotify_client_secret = 'cbb7a444361a426ab782dd3370592dd9'
-spotify_client_id = '5ceade09739a401c9fb9095528567371' 
-
-openai_key = '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'
-claude_key = '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'
