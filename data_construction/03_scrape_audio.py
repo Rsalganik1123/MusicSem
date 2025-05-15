@@ -23,10 +23,16 @@ import requests
 import pickle 
 import itertools
 import time 
+import re
+import json
 
 
-os.environ['SPOTIPY_CLIENT_ID'] = 'f613434cc4674993be8852236860376c'
-os.environ['SPOTIPY_CLIENT_SECRET'] = '1b5709c6bd644156a8f4391523dd3b15'
+from utils import parse_args
+from secret_keys import * 
+
+
+os.environ['SPOTIPY_CLIENT_ID'] = spotify_client_id
+os.environ['SPOTIPY_CLIENT_SECRET'] = spotify_client_secret
 
 def previously_loaded(read_path, json_folder_path, json_responses, good_idx):
     # ipdb.set_trace() 
@@ -160,7 +166,67 @@ def search_uri_from_NER(sp, json_fp, audio_folder_path, json_folder_path, pairs_
         
     return good, bad,  fps 
 
-def main(input_dir:str, thread:str, good_idx=[]): 
+def sanitize_json_like_string(raw_str):
+    """
+    Converts a malformed JSON-like string (e.g., with Python tuples, escape chars)
+    into valid JSON that can be loaded with json.loads.
+    """
+    # Remove leading/trailing backticks and 'json' marker if present
+    cleaned = raw_str.strip().strip("`")
+    
+    # Replace Python tuples (e.g., ("a", "b")) with JSON lists (["a", "b"])
+    cleaned = re.sub(r'\(\s*"(.*?)"\s*,\s*"(.*?)"\s*\)', r'["\1", "\2"]', cleaned)
+    cleaned = re.sub(r"\(\s*'(.*?)'\s*,\s*'(.*?)'\s*\)", r'["\1", "\2"]', cleaned)
+
+    # Replace single quotes with double quotes (except inside words like "Plain White T's")
+    # Use a smarter quote replace: only replace keys and values
+    def replace_single_quotes(match):
+        return f'"{match.group(1)}"'
+
+    cleaned = re.sub(r"'([^']*)'", replace_single_quotes, cleaned)
+
+    # Remove escape characters like \n
+    cleaned = cleaned.replace('\\n', '').replace('\\', '')
+
+    # Final trim and parse
+    cleaned = cleaned.strip()
+    return json.loads(cleaned)
+
+def split_jsonl_into_json(input_dir, thread): 
+    ipdb.set_trace()  
+    data = json.load(open(f'{input_dir}processed_extractions_output/extracted_data.json', 'r'))
+    df = pd.DataFrame(data[f'{thread}_batches'])
+    keys = ['pairs', 'Descriptive', 'Contextual', 'Situational', 'Atmospheric', 'Metadata', 'idx']
+    df = df.rename(columns={"input": "raw_text", 'raw_text':"random", 'custom_id':'idx'}) 
+    df.idx = df.idx.apply(lambda x: int(x.split('-')[-1])) 
+    output_dir = f'{input_dir}indiv_jsons/'
+    if not os.path.exists(output_dir): 
+        os.makedirs(output_dir)
+    rel_idx = [] 
+    for i in tqdm(range(len(df))): 
+        rel_count = 0 
+        row = df.iloc[i, : ]
+        
+        if row['pairs'] != []: rel_count += 1 
+        else: 
+            continue 
+        if row['Descriptive'] != []: rel_count += 1 
+        if row['Contextual'] != []: rel_count += 1 
+        if row['Situational'] != []: rel_count += 1 
+        if row['Atmospheric'] != []: rel_count += 1 
+        if row['Metadata'] != []: rel_count += 1 
+        if rel_count >=3 :
+            j = row[keys].to_json()
+            j_data = {
+                    'extraction_model': 'gpt-4', 
+                    'raw_post': row['raw_text'], 
+                    'extraction': j }
+            json.dump(j_data, open(f'{output_dir}/{i}.json', 'w'))
+            rel_idx.append(i)
+    print(len(rel_idx))
+    return output_dir
+
+def main(input_dir:str, thread:str, output_dir, good_idx=[]): 
     session = requests.Session()
     retry = urllib3.Retry(
         respect_retry_after_header=False
@@ -169,11 +235,11 @@ def main(input_dir:str, thread:str, good_idx=[]):
 
     sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(),
                         requests_session=session)
-    audio_folder_path = f'{input_dir}spotify_mp3/'
-    json_folder_path = f'{input_dir}spotify_json/{thread}2/'
-    # ipdb.set_trace() 
-    response_folder_path = f'{input_dir}json_temps/{thread}/'
+    audio_folder_path = f'{output_dir}spotify_mp3/'
+    json_folder_path = f'{output_dir}spotify_json/{thread}/'
+    response_folder_path = f'{input_dir}'
     os.makedirs(json_folder_path, exist_ok=True)
+    os.makedirs(audio_folder_path, exist_ok=True)
     all_json_responses = glob(f'{response_folder_path}*.json') 
     json_responses = previously_loaded(response_folder_path,json_folder_path, all_json_responses, good_idx)
     good, bad, all_writes = 0, 0, 0 
@@ -211,5 +277,10 @@ def main(input_dir:str, thread:str, good_idx=[]):
         df = pd.DataFrame({'df_idx': idx, 'mp3_files':mp3_files})
         pickle.dump(df, open(f'/data2/rsalgani/reddit/org/{thread}_mp3_file_locations.pkl', 'wb'))
 
-main(input_dir='/data2/rsalgani/reddit/',
-    thread='LetsTalkMusic')
+if __name__ == '__main__': 
+    args = parse_args()
+    json_path = split_jsonl_into_json(args.input_dir, args.thread)
+    print(json_path)
+    main(input_dir=json_path,
+        thread=args.thread, 
+        output_dir=args.output_dir)
