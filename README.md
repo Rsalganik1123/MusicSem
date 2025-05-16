@@ -92,7 +92,13 @@ python3 frozen_main.py --gen_model mullama --dataset music_sem --prompt_key prom
 ```
 
 ## Retrieval 
-TBD. 
+We have encapsulated text/audio encoders for LARP, CLAP, ImageBind, and CLaMP3 under the directory retrieval/models/{model_name}/{model_name}_encoder, where {model_name} corresponds to these model identifiers. Our retrieval interface automatically encodes the entire dataset and enables cross-modal querying using either text prompts or audio file paths.
+
+```
+python retrieval.py --query "happy pop song with strong drums" --top_k 5 --encoder LARP --dataset_json data/MSD-Eval.json --feature_dir .
+```
+
+Automatically checks for pre-extracted features in --feature_dir. If features exist: Loads them directly; If not: Performs fresh feature extraction and saves results.
 
 # Evaluation
 
@@ -116,4 +122,15 @@ To evaluate with playntell you can run your evaluation using:
 ```
 python3 m2t.py --eval_data music_sem --gen_model mullama --track_id spotify_id --table_caption_key prompt --gen_caption_key caption_as_str --csv_path <path to csv>
 
+```
+
+## Retrieval
+
+We implement the following metrics to evaluate cross-modal retrieval performance:
+
+Recall@1, Recall@5, Recall@10, NDCG@5, NDCG@10, and MRR.
+
+To run the evaluation, use:
+```
+python3 retrival_eval.py --dataset_path /path/to/dataset.json --encoder LARP --task_name LARP-MSD
 ```
