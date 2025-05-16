@@ -107,7 +107,7 @@ python3 t2m_special_FAD.py --ref_model encodec-emb --ref_dataset fma_pop --gen_m
 
 To evaluate with audiolm_eval you can run your evaluation using: 
 ```
-python3 t2m_cannon.py --ref_dir <path to reference audio> --gen_dir <path to generated audio>
+python3 t2m_cannon.py --ref_dir <path to reference audio directory> --gen_dir <path to generated audio directory> --metric <"clap", "vendi" or "kld"> --csv_dir <path to csv file>
 ```
 ## Music to Text
 We present frozen repositories for each of the model implementations and a command line code to run the evaluations. For text-to-music models we provide an evaluation based on the toolkit from https://github.com/deezer/playntell. 
