@@ -75,7 +75,7 @@ python3 08_final_clean.py --gathered_file /u/rsalgani/2024-2025/MusBench/data/sa
 We create a smooth pipeline for users to quickly reproduce the results we showcase in our paper. 
 For each model we have a file in the `environments` folder. Before running please build the environment associated with that model name. Unfortunately, we are not resposible for any changes made to the libraries but we have done our best to be as thorough as possible and you are always welcome to reach out to us for help. 
 
-## Text to Music 
+## Text to Music Generation
 We present frozen repositories for each of the model implementations and a command line code to run the evaluations. 
 
 To evaluate, activate the associated conda env and then run: 
@@ -83,7 +83,7 @@ To evaluate, activate the associated conda env and then run:
 python3 frozen_main.py --gen_model musicgen --dataset music_sem --prompt_key prompt
 ```
 
-## Music to Text
+## Music to Text Generaton
 We present frozen repositories for each of the model implementations and a command line code to run the evaluations. 
 
 To evaluate, activate the associated conda env and then run: 
@@ -91,7 +91,7 @@ To evaluate, activate the associated conda env and then run:
 python3 frozen_main.py --gen_model mullama --dataset music_sem --prompt_key prompt
 ```
 
-## Retrieval 
+## Cross Modal Retrieval 
 We have encapsulated text/audio encoders for LARP, CLAP, ImageBind, and CLaMP3 under the directory retrieval/models/{model_name}/{model_name}_encoder, where {model_name} corresponds to these model identifiers. Our retrieval interface automatically encodes the entire dataset and enables cross-modal querying using either text prompts or audio file paths.
 
 ```
@@ -102,7 +102,7 @@ Automatically checks for pre-extracted features in --feature_dir. If features ex
 
 # Evaluation
 
-## Text to Music 
+## Text to Music Generation
 
 For text-to-music models we provide two different evaluations based on two different toolkits, https://github.com/microsoft/fadtk and https://github.com/haoheliu/audioldm_eval. 
 
@@ -115,7 +115,7 @@ To evaluate with audiolm_eval you can run your evaluation using:
 ```
 python3 t2m_cannon.py --ref_dir <path to reference audio directory> --gen_dir <path to generated audio directory> --metric <"clap", "vendi" or "kld"> --csv_dir <path to csv file>
 ```
-## Music to Text
+## Music to Text Generation
 We present frozen repositories for each of the model implementations and a command line code to run the evaluations. For text-to-music models we provide an evaluation based on the toolkit from https://github.com/deezer/playntell. 
 
 To evaluate with playntell you can run your evaluation using: 
@@ -124,7 +124,7 @@ python3 m2t.py --eval_data music_sem --gen_model mullama --track_id spotify_id -
 
 ```
 
-## Retrieval
+## Cross Modal Retrieval
 
 We implement the following metrics to evaluate cross-modal retrieval performance:
 
