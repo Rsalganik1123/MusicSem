@@ -38,4 +38,4 @@ if __name__ == '__main__':
         futga_gen(args, audio_dict)
     if args.gen_model == 'lp_musiccaps': #activate lp_musiccaps env
         from m2t.lpmusiccaps.lpmusiccaps import lpmusiccaps_gen
-        lpmc_gen(args, audio_dict)
+        lpmusiccaps_gen(args, audio_dict)
