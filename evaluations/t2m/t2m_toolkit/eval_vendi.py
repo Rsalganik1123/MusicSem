@@ -18,7 +18,7 @@ import torchaudio
 from torchaudio.transforms import MelSpectrogram, AmplitudeToDB
 import laion_clap
 import os
-from vendi import compute_vendi_score
+from .vendi import compute_vendi_score
 import pickle as pk
 import pandas as pd
 from tqdm import tqdm
@@ -107,7 +107,7 @@ def compute_vendi_from_spectrograms(specs: list[np.ndarray]) -> float:
 
     return compute_vendi_score(X)
 
-def main():
+def run():
     df = pd.DataFrame(
         np.zeros((len(datasets), len(models))),
         columns=models,
@@ -123,5 +123,13 @@ def main():
             df.at[dataset, model] = score
     print(df)
     df.to_pickle("./vendi_score.pkl")
-    
-main()
+
+def run_vendi_eval(args):
+    audio_dir = args.gen_dir
+    print(f"Computing Vendi score for audio files: {audio_dir}")
+    specs = draw_spectrograms(audio_dir)
+    score = compute_vendi_from_spectrograms(specs)
+    print("Vendi score: ",score)
+
+if __name__ == "__main__": 
+    run()
