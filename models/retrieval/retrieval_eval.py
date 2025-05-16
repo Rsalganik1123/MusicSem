@@ -4,6 +4,8 @@ import os
 from tqdm import tqdm
 from sklearn.metrics import label_ranking_average_precision_score
 from music_encoder import EncoderFactory
+import argparse
+
 
 class FeatureExtractor:
     def __init__(self, encoder, task="musicCaps"):
@@ -139,28 +141,61 @@ def calculate_random_scores(M):
     
     return scores
 
+def parse_args():
+    parser = argparse.ArgumentParser(description="Cross-Modal Retrieval Evaluation Tool")
+    
+    parser.add_argument(
+        "--dataset_path",
+        type=str,
+        default="data/MSD-Eval.json",
+        help="Path to the input dataset JSON file"
+    )
+    parser.add_argument(
+        "--encoder",
+        type=str,
+        default="clamp3",
+        choices=["LARP", "CLAP", "imagebind", "clamp3"],
+        help="Type of encoder to use (default: clamp3)"
+    )
+    parser.add_argument(
+        "--task_name",
+        type=str,
+        default="tmp",
+        help="Task identifier for naming outputs (default: tmp)"
+    )
+    parser.add_argument(
+        "--output_dir",
+        type=str,
+        default="./",
+        help="Output directory for features and results (default: ./)"
+    )
+    
+    return parser.parse_args()
 
 if __name__ == '__main__':
-    encoder = EncoderFactory.create('LARP')
-    encoder.load_model()
-
-    task = "LARP-MSD"
-    extractor = FeatureExtractor(encoder, task=task)
-    extractor.process_dataset('data/MSD-Eval.json')
+    args = parse_args()
     
-    text_feats = np.load(task + '-text_features.npy', allow_pickle=True)
-    audio_feats = np.load(task + '-audio_features.npy', allow_pickle=True)
-    labels = np.load(task + '-labels.npy', allow_pickle=True)
+    os.makedirs(args.output_dir, exist_ok=True)
+    
+    encoder = EncoderFactory.create(args.encoder)
+    encoder.load_model()
+    
+    extractor = FeatureExtractor(encoder, task=args.task_name)
+    extractor.process_dataset(args.dataset_path)
+    
+    text_feats = np.load(f"{args.task_name}-text_features.npy", allow_pickle=True)
+    audio_feats = np.load(f"{args.task_name}-audio_features.npy", allow_pickle=True)
+    labels = np.load(f"{args.task_name}-labels.npy", allow_pickle=True)
     
     evaluator = RetrievalEvaluator(text_feats, audio_feats, labels)
     evaluator.compute_similarity()
     results = evaluator.evaluate()
     
-    print("Evaluation Results:")
+    output_path = os.path.join(args.output_dir, f"{args.task_name}-result.json")
+    with open(output_path, 'w') as f:
+        json.dump(results, f)
+    
+    print("\nEvaluation Results:")
     for k, v in results.items():
         print(f"{k}: {v:.4f}")
-    with open(task + '-result.json', 'w') as f:
-        json.dump(results, f)
-
-    # random_scores = calculate_random_scores(474)
-    # print(random_scores)
+    print(f"\nResults saved to {output_path}")

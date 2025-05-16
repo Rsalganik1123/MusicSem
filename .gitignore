@@ -49,5 +49,8 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
+*.ckpt
+*.pth
+/models/retrieval/data/
 
 /u/rsalgani/2024-2025/MusBench/data_construction/secrets.py
