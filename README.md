@@ -68,3 +68,52 @@ python3 07_hallucination_check2.py --gathered_file /u/rsalgani/2024-2025/MusBenc
 python3 08_final_clean.py --gathered_file /u/rsalgani/2024-2025/MusBench/data/sample_for_testing/collection/clean/FINAL_20250515_135306 --output_dir /u/rsalgani/2024-2025/MusBench/data/sample_for_testing/collection/final
 ```
 
+
+
+# Running Inference
+
+We create a smooth pipeline for users to quickly reproduce the results we showcase in our paper. 
+For each model we have a file in the `environments` folder. Before running please build the environment associated with that model name. Unfortunately, we are not resposible for any changes made to the libraries but we have done our best to be as thorough as possible and you are always welcome to reach out to us for help. 
+
+## Text to Music 
+We present frozen repositories for each of the model implementations and a command line code to run the evaluations. 
+
+To evaluate, activate the associated conda env and then run: 
+```
+python3 frozen_main.py --gen_model musicgen --dataset music_sem --prompt_key prompt
+```
+
+## Music to Text
+We present frozen repositories for each of the model implementations and a command line code to run the evaluations. 
+
+To evaluate, activate the associated conda env and then run: 
+```
+python3 frozen_main.py --gen_model mullama --dataset music_sem --prompt_key prompt
+```
+
+## Retrieval 
+TBD. 
+
+# Evaluation
+
+## Text to Music 
+
+For text-to-music models we provide two different evaluations based on two different toolkits, https://github.com/microsoft/fadtk and https://github.com/haoheliu/audioldm_eval. 
+
+To evaluate with fadtk you can run your evaluation using: 
+```
+python3 t2m_special_FAD.py --ref_model encodec-emb --ref_dataset fma_pop --gen_model musicgen --eval_data music_caps
+```
+
+To evaluate with audiolm_eval you can run your evaluation using: 
+```
+python3 t2m_cannon.py --ref_dir <path to reference audio> --gen_dir <path to generated audio>
+```
+## Music to Text
+We present frozen repositories for each of the model implementations and a command line code to run the evaluations. For text-to-music models we provide an evaluation based on the toolkit from https://github.com/deezer/playntell. 
+
+To evaluate with playntell you can run your evaluation using: 
+```
+python3 m2t.py --eval_data music_sem --gen_model mullama --track_id spotify_id --table_caption_key prompt --gen_caption_key caption_as_str --csv_path <path to csv>
+
+```
