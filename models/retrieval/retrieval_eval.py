@@ -41,9 +41,9 @@ class FeatureExtractor:
             
             self.labels.append(self.audio_index_map.get(audio_path, -1))
 
-        np.save(self.task + '-text_features.npy', np.array(self.text_features))
-        np.save(self.task + '-audio_features.npy', np.array(self.audio_features))
-        np.save(self.task + '-labels.npy', np.array(self.labels))
+        np.save(os.path.join(args.output_dir, f"{args.task_name}-text_features.npy"), np.array(self.text_features))
+        np.save(os.path.join(args.output_dir, f"{args.task_name}-audio_features.npy"), np.array(self.audio_features))
+        np.save(os.path.join(args.output_dir, f"{args.task_name}-labels.npy"), np.array(self.labels))
 
 class RetrievalEvaluator:
     def __init__(self, text_features, audio_features, labels):
@@ -52,16 +52,16 @@ class RetrievalEvaluator:
         :param audio_features: (M, D) 
         :param labels: (N,)
         """
-        print(text_features.shape)
-        print(audio_features.shape)
+        # print(text_features.shape)
+        # print(audio_features.shape)
         if text_features.shape[1] == 1:
             text_features = text_features.squeeze(1)
         self.text_features = text_features
         if audio_features.shape[1] == 1:
             audio_features = audio_features.squeeze(1)
         self.audio_features = audio_features
-        print(text_features.shape)
-        print(audio_features.shape)
+        # print(text_features.shape)
+        # print(audio_features.shape)
         self.labels = labels
         self.sim_matrix = None
 
@@ -158,6 +158,18 @@ def parse_args():
         help="Type of encoder to use (default: clamp3)"
     )
     parser.add_argument(
+        "--model_path",
+        default=None,
+        type=str
+    )    
+    parser.add_argument(
+        "--amodle_of_CLAP",
+        type=str,
+        default="HTSAT",
+        choices=["PANN", "HTSAT"],
+        help="Type of audio encoder of CLAP (default: HTSAT)"
+    )
+    parser.add_argument(
         "--task_name",
         type=str,
         default="tmp",
@@ -169,7 +181,6 @@ def parse_args():
         default="./",
         help="Output directory for features and results (default: ./)"
     )
-    
     return parser.parse_args()
 
 if __name__ == '__main__':
@@ -177,15 +188,18 @@ if __name__ == '__main__':
     
     os.makedirs(args.output_dir, exist_ok=True)
     
-    encoder = EncoderFactory.create(args.encoder)
+    if args.encoder == "CLAP":
+        encoder = EncoderFactory.create(args.encoder, model_path=args.model_path, autio_model_type=args.amodle_of_CLAP)
+    else:
+        encoder = EncoderFactory.create(args.encoder, model_path=args.model_path)
     encoder.load_model()
     
     extractor = FeatureExtractor(encoder, task=args.task_name)
     extractor.process_dataset(args.dataset_path)
     
-    text_feats = np.load(f"{args.task_name}-text_features.npy", allow_pickle=True)
-    audio_feats = np.load(f"{args.task_name}-audio_features.npy", allow_pickle=True)
-    labels = np.load(f"{args.task_name}-labels.npy", allow_pickle=True)
+    text_feats = np.load(os.path.join(args.output_dir, f"{args.task_name}-text_features.npy"), allow_pickle=True)
+    audio_feats = np.load(os.path.join(args.output_dir, f"{args.task_name}-audio_features.npy"), allow_pickle=True)
+    labels = np.load(os.path.join(args.output_dir, f"{args.task_name}-labels.npy"), allow_pickle=True)
     
     evaluator = RetrievalEvaluator(text_feats, audio_feats, labels)
     evaluator.compute_similarity()
@@ -199,3 +213,5 @@ if __name__ == '__main__':
     for k, v in results.items():
         print(f"{k}: {v:.4f}")
     print(f"\nResults saved to {output_path}")
+
+# python retrieval_eval.py --dataset_path data/MSD-Eval.json --encoder CLAP --amodle_of_CLAP PANN --task_name CLAP-sft_MSD --model_path /model/tteng/epoch_1.pt

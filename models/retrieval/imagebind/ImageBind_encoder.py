@@ -1,5 +1,4 @@
 import os
-
 import torch
 import tempfile
 import numpy as np
@@ -13,7 +12,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__f
 from base_encoder import BaseEncoder
 
 class ImageBindEncoder(BaseEncoder):
-    """ImageBind多模态编码器实现，支持文本和音频模态"""
+    """ImageBind multimodal encoder implementation supporting text and audio modalities"""
     
     def __init__(self, model_path: str = None, device: str = 'cpu'):
         super().__init__(model_path, device)
@@ -33,20 +32,20 @@ class ImageBindEncoder(BaseEncoder):
         self.model.to(self.device)
     
     def get_modality_support(self):
-        """返回支持的模态类型"""
+        """Return supported modality types"""
         return {'audio': True, 'text': True}
 
     @BaseEncoder._batch_processing_wrapper
     def encode_audio(self, 
                     audio_input: Union[str, np.ndarray, torch.Tensor, List[str], bytes],
                     **kwargs) -> Union[torch.Tensor, List[torch.Tensor]]:
-        """编码音频输入（支持5种输入格式）"""
+        """Encode audio input (supports 5 input formats)"""
         self._check_initialized()
         
-        # 统一输入处理
+        # Unified input processing
         processed_paths = self._process_audio_input(audio_input)
         
-        # 加载和转换音频数据
+        # Load and transform audio data
         inputs = {
             ModalityType.AUDIO: data.load_and_transform_audio_data(
                 processed_paths, 
@@ -54,24 +53,24 @@ class ImageBindEncoder(BaseEncoder):
             )
         }
         
-        # 执行推理
+        # Perform inference
         with torch.no_grad():
             embeddings = self.model(inputs)[ModalityType.AUDIO]
         
-        # 设备一致性处理
+        # Device consistency handling
         return self._post_process(embeddings).squeeze(0).cpu().numpy()
 
     @BaseEncoder._batch_processing_wrapper
     def encode_text(self,
                    text_input: Union[str, List[str], dict],
                    **kwargs) -> Union[torch.Tensor, List[torch.Tensor]]:
-        """编码文本输入（支持3种输入格式）"""
+        """Encode text input (supports 3 input formats)"""
         self._check_initialized()
         
-        # 统一输入格式
+        # Unify input format
         texts = self._process_text_input(text_input)
         
-        # 加载和转换文本数据
+        # Load and transform text data
         inputs = {
             ModalityType.TEXT: data.load_and_transform_text(
                 texts, 
@@ -79,14 +78,14 @@ class ImageBindEncoder(BaseEncoder):
             )
         }
         
-        # 执行推理
+        # Perform inference
         with torch.no_grad():
             embeddings = self.model(inputs)[ModalityType.TEXT]
         
         return self._post_process(embeddings).squeeze(0).cpu().numpy()
 
     def _process_audio_input(self, audio_input):
-        """统一处理不同类型的音频输入"""
+        """Unified processing for different types of audio input"""
         if isinstance(audio_input, list):
             return [self._save_non_file_input(f) if not isinstance(f, str) else f for f in audio_input]
         
@@ -96,7 +95,7 @@ class ImageBindEncoder(BaseEncoder):
         return [audio_input]
 
     def _process_text_input(self, text_input):
-        """统一处理不同类型的文本输入"""
+        """Unified processing for different types of text input"""
         if isinstance(text_input, dict):
             return text_input.get('text', [])
         elif isinstance(text_input, str):
@@ -104,7 +103,7 @@ class ImageBindEncoder(BaseEncoder):
         return text_input
 
     def _save_non_file_input(self, data: Union[bytes, np.ndarray, torch.Tensor]) -> str:
-        """保存非文件输入到临时文件"""
+        """Save non-file input to temporary file"""
         self._setup_temp_dir()
         temp_path = os.path.join(self.temp_dir.name, f"temp_{hash(str(data))}.wav")
         
@@ -118,7 +117,6 @@ class ImageBindEncoder(BaseEncoder):
         return temp_path
 
     def _post_process(self, embeddings: torch.Tensor):
-        """后处理：设备转换和维度压缩"""
+        """Post-processing: device conversion and dimension reduction"""
         embeddings = embeddings.cpu() if self.device == 'cpu' else embeddings
         return embeddings.squeeze(0) if embeddings.dim() > 2 else embeddings
-
