@@ -23,12 +23,16 @@ class CLAPEncoder(BaseEncoder):
     def load_model(self):
         """Load CLAP model weights and preprocessing tools"""
         if not self.initialized:
-            self.model = laion_clap.CLAP_Module(
-                enable_fusion=False,
-                amodel=self.audio_model_type
-                # amodel='HTSAT-base'
-            ).to(torch.device(self.device))
-            
+            if self.audio_model_type == "Default":
+                self.model = laion_clap.CLAP_Module(
+                    enable_fusion=False
+                ).to(torch.device(self.device))
+            else:
+                self.model = laion_clap.CLAP_Module(
+                    enable_fusion=False,
+                    amodel=self.audio_model_type
+                ).to(torch.device(self.device))
+
             if self.model_path:
                 self.model.load_ckpt(self.model_path)
                 

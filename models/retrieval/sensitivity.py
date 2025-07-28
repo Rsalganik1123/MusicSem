@@ -179,11 +179,22 @@ def main():
 if __name__ == '__main__':
     main()
 
+# For 630k_best:
 """
 python sensitivity.py \
   --encoder CLAP \
   --model_path /model/tteng/epoch_1.pt \
-  --amodle_of_CLAP PANN \
+  --amodle_of_CLAP Default \
+  --audio_feat_path CLAP-sft_MSD-audio_features.npy \
+  --data_path data/all_counterfac.csv \
+  --output_report  CLAP-sft_MSD-sensitivity.json
+"""
+# For music_audioset_epoch_15_esc_90.14:
+"""
+python sensitivity.py \
+  --encoder CLAP \
+  --model_path /model/tteng/MusicEnocdeFactory/models/CLAP/ckpt/music_audioset_epoch_15_esc_90.14.pt \
+  --amodle_of_CLAP HTSAT-base \
   --audio_feat_path CLAP-sft_MSD-audio_features.npy \
   --data_path data/all_counterfac.csv \
   --output_report  CLAP-sft_MSD-sensitivity.json
