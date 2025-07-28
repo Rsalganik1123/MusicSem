@@ -51,6 +51,7 @@ docs/_build/
 
 *.ckpt
 *.pth
-/models/retrieval/data/
+*.safetensors
+*.npy
 
 /u/rsalgani/2024-2025/MusBench/data_construction/secrets.py

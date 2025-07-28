@@ -13,18 +13,19 @@ from laion_clap.training.data import int16_to_float32, float32_to_int16, get_aud
 class CLAPEncoder(BaseEncoder):
     """CLAP encoder implementation supporting both audio and text modalities"""
     
-    def __init__(self, model_path: str = None, autio_model_type = None, device: str = 'cpu'):
+    def __init__(self, model_path: str = None, audio_model_type = None, device: str = 'cpu'):
         super().__init__(model_path, device)
         self.model = None
-        self.model_path = model_path if model_path else "./models/CLAP/ckpt/music_audioset_epoch_15_esc_90.14.pt"
-        self.autio_model_type = autio_model_type if autio_model_type else "HTSAT-base"
+        self.model_path = model_path if model_path else "/model/tteng/MusicEnocdeFactory/models/CLAP/ckpt/music_audioset_epoch_15_esc_90.14.pt"
+        self.audio_model_type = audio_model_type if audio_model_type else "HTSAT-base"
         self.sample_rate = 48000
         
     def load_model(self):
         """Load CLAP model weights and preprocessing tools"""
         if not self.initialized:
             self.model = laion_clap.CLAP_Module(
-                enable_fusion=False
+                enable_fusion=False,
+                amodel=self.audio_model_type
                 # amodel='HTSAT-base'
             ).to(torch.device(self.device))
             
