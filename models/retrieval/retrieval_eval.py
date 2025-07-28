@@ -60,8 +60,8 @@ class RetrievalEvaluator:
         if audio_features.shape[1] == 1:
             audio_features = audio_features.squeeze(1)
         self.audio_features = audio_features
-        # print(text_features.shape)
-        # print(audio_features.shape)
+        print("text_features.shape:", text_features.shape)
+        print("audio_features.shape:", audio_features.shape)
         self.labels = labels
         self.sim_matrix = None
 
@@ -165,9 +165,9 @@ def parse_args():
     parser.add_argument(
         "--amodle_of_CLAP",
         type=str,
-        default="HTSAT",
-        choices=["PANN", "HTSAT"],
-        help="Type of audio encoder of CLAP (default: HTSAT)"
+        default="Default",
+        choices=["Default", 'HTSAT-base', 'HTSAT-large', 'HTSAT-tiny', 'HTSAT-tiny-win-1536', 'PANN-6', 'PANN-10', 'PANN-14', 'PANN-14-fmax-8k-20s', 'PANN-14-fmax-18k', 'PANN-14-tiny-transformer', 'PANN-14-win-1536'],
+        help="Type of audio encoder of CLAP (default: HTSAT-base)"
     )
     parser.add_argument(
         "--task_name",
@@ -189,7 +189,7 @@ if __name__ == '__main__':
     os.makedirs(args.output_dir, exist_ok=True)
     
     if args.encoder == "CLAP":
-        encoder = EncoderFactory.create(args.encoder, model_path=args.model_path, autio_model_type=args.amodle_of_CLAP)
+        encoder = EncoderFactory.create(args.encoder, model_path=args.model_path, audio_model_type=args.amodle_of_CLAP)
     else:
         encoder = EncoderFactory.create(args.encoder, model_path=args.model_path)
     encoder.load_model()
@@ -214,4 +214,7 @@ if __name__ == '__main__':
         print(f"{k}: {v:.4f}")
     print(f"\nResults saved to {output_path}")
 
-# python retrieval_eval.py --dataset_path data/MSD-Eval.json --encoder CLAP --amodle_of_CLAP PANN --task_name CLAP-sft_MSD --model_path /model/tteng/epoch_1.pt
+# For 630k_best:
+# python retrieval_eval.py --dataset_path data/MSD-Eval.json --encoder CLAP --amodle_of_CLAP Default --task_name CLAP-sft_MSD --model_path /model/tteng/epoch_1.pt
+# For music_audioset_epoch_15_esc_90.14:
+# python retrieval_eval.py --dataset_path data/MSD-Eval.json --encoder CLAP --amodle_of_CLAP HTSAT-base --task_name CLAP-sft_MSD --model_path /model/tteng/MusicEnocdeFactory/models/CLAP/ckpt/music_audioset_epoch_15_esc_90.14.pt

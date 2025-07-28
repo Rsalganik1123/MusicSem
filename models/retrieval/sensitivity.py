@@ -15,6 +15,7 @@ class SensitivityAnalyzer:
         if audio_features.shape[1] == 1:
             audio_features = audio_features.squeeze(1)
         self.audio_features = audio_features
+        print("audio_features.shape:", audio_features.shape:)
 
         audio_norm = self.audio_features / np.linalg.norm(self.audio_features, axis=1, keepdims=True)
         self.audio_norm = audio_norm.astype(np.float32)
@@ -85,8 +86,8 @@ def parse_args():
     parser.add_argument(
         "--amodle_of_CLAP",
         type=str,
-        default="HTSAT",
-        choices=["PANN", "HTSAT"],
+        default="HTSAT-base",
+        choices=['HTSAT-base', 'HTSAT-large', 'HTSAT-tiny', 'HTSAT-tiny-win-1536', 'PANN-6', 'PANN-10', 'PANN-14', 'PANN-14-fmax-8k-20s', 'PANN-14-fmax-18k', 'PANN-14-tiny-transformer', 'PANN-14-win-1536'],
         help="Audio model type for CLAP encoder (ignored for other encoders)"
     )
     parser.add_argument(
@@ -178,11 +179,22 @@ def main():
 if __name__ == '__main__':
     main()
 
+# For 630k_best:
 """
 python sensitivity.py \
   --encoder CLAP \
   --model_path /model/tteng/epoch_1.pt \
-  --amodle_of_CLAP PANN \
+  --amodle_of_CLAP Default \
+  --audio_feat_path CLAP-sft_MSD-audio_features.npy \
+  --data_path data/all_counterfac.csv \
+  --output_report  CLAP-sft_MSD-sensitivity.json
+"""
+# For music_audioset_epoch_15_esc_90.14:
+"""
+python sensitivity.py \
+  --encoder CLAP \
+  --model_path /model/tteng/MusicEnocdeFactory/models/CLAP/ckpt/music_audioset_epoch_15_esc_90.14.pt \
+  --amodle_of_CLAP HTSAT-base \
   --audio_feat_path CLAP-sft_MSD-audio_features.npy \
   --data_path data/all_counterfac.csv \
   --output_report  CLAP-sft_MSD-sensitivity.json
