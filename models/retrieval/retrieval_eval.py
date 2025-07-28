@@ -215,6 +215,6 @@ if __name__ == '__main__':
     print(f"\nResults saved to {output_path}")
 
 # For 630k_best:
-# python retrieval_eval.py --dataset_path data/MSD-Eval.json --encoder CLAP --amodle_of_CLAP Default --task_name CLAP-sft_MSD --model_path /model/tteng/epoch_1.pt
+# python retrieval_eval.py --dataset_path data/MSD-Eval.json --encoder CLAP --amodle_of_CLAP Default --task_name CLAP-sft-111_MSD --model_path /model/tteng/MusicSem/models/retrieval/epoch_111.pt
 # For music_audioset_epoch_15_esc_90.14:
 # python retrieval_eval.py --dataset_path data/MSD-Eval.json --encoder CLAP --amodle_of_CLAP HTSAT-base --task_name CLAP-sft_MSD --model_path /model/tteng/MusicEnocdeFactory/models/CLAP/ckpt/music_audioset_epoch_15_esc_90.14.pt

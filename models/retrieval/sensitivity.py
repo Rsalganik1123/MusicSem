@@ -15,7 +15,7 @@ class SensitivityAnalyzer:
         if audio_features.shape[1] == 1:
             audio_features = audio_features.squeeze(1)
         self.audio_features = audio_features
-        print("audio_features.shape:", audio_features.shape:)
+        print("audio_features.shape:", audio_features.shape)
 
         audio_norm = self.audio_features / np.linalg.norm(self.audio_features, axis=1, keepdims=True)
         self.audio_norm = audio_norm.astype(np.float32)
@@ -86,8 +86,8 @@ def parse_args():
     parser.add_argument(
         "--amodle_of_CLAP",
         type=str,
-        default="HTSAT-base",
-        choices=['HTSAT-base', 'HTSAT-large', 'HTSAT-tiny', 'HTSAT-tiny-win-1536', 'PANN-6', 'PANN-10', 'PANN-14', 'PANN-14-fmax-8k-20s', 'PANN-14-fmax-18k', 'PANN-14-tiny-transformer', 'PANN-14-win-1536'],
+        default="Default",
+        choices=['Default', 'HTSAT-base', 'HTSAT-large', 'HTSAT-tiny', 'HTSAT-tiny-win-1536', 'PANN-6', 'PANN-10', 'PANN-14', 'PANN-14-fmax-8k-20s', 'PANN-14-fmax-18k', 'PANN-14-tiny-transformer', 'PANN-14-win-1536'],
         help="Audio model type for CLAP encoder (ignored for other encoders)"
     )
     parser.add_argument(
@@ -129,7 +129,7 @@ def main():
     args = parse_args()
     
     if args.encoder == "CLAP":
-        encoder = EncoderFactory.create(args.encoder, model_path=args.model_path, autio_model_type=args.amodle_of_CLAP)
+        encoder = EncoderFactory.create(args.encoder, model_path=args.model_path, audio_model_type=args.amodle_of_CLAP)
     else:
         encoder = EncoderFactory.create(args.encoder, model_path=args.model_path)
     encoder.load_model()
@@ -183,9 +183,9 @@ if __name__ == '__main__':
 """
 python sensitivity.py \
   --encoder CLAP \
-  --model_path /model/tteng/epoch_1.pt \
+  --model_path /model/tteng/MusicSem/models/retrieval/epoch_111.pt \
   --amodle_of_CLAP Default \
-  --audio_feat_path CLAP-sft_MSD-audio_features.npy \
+  --audio_feat_path CLAP-sft-111_MSD-audio_features.npy \
   --data_path data/all_counterfac.csv \
   --output_report  CLAP-sft_MSD-sensitivity.json
 """
